@@ -1,0 +1,49 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
+}
+
+datasource db {
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
+  shadowDatabaseUrl    = env("SHADOW_DATABASE_URL")
+  referentialIntegrity = "prisma"
+}
+
+model User {
+  id           String        @id @default(uuid())
+  username     String        @unique
+  password     String
+  email        String
+  role         UserRole      @default(CLIENT)
+  SkillProfile SkillProfile?
+}
+
+model SkillProfile {
+  id                  String   @id @default(uuid())
+  user                User     @relation(fields: [userId], references: [id])
+  userId              String   @unique
+  iidxSpDan           Int?
+  iidxSpDanKyoku      Boolean?
+  iidxSpRadar         Float?
+  iidxSpAvgBpi        Float?
+  iidxDpDan           Int?
+  iidxDpDanKyoku      Boolean?
+  iidxDpRadar         Float?
+  iidxDpEreterAbility Float?
+  sdvxVolforce        Float?
+  sdvxDan             Int?
+  popnClass           Float?
+  popnSRanLv          Int?
+  dmSkillPoint        Float?
+  gfSkillPoint        Float?
+  nosBasicGrade       Float?
+  nosRecitalGrade     Float?
+  jubeatJubility      Float?
+  ddrSkillAttack      Float?
+}
+
+enum UserRole {
+  CLIENT
+  ADMIN
+}
